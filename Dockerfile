@@ -9,3 +9,5 @@ RUN yum install -y epel-release \
     && bash setup.sh \
     && rm -rf /build/* \
     && yum erase -y epel-release gcc gcc-c++ lbzip2 make wget
+
+ENV PATH="/opt/cross/bin:${PATH}"
