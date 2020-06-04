@@ -17,11 +17,11 @@ TARGET=aarch64-linux
 USE_NEWLIB=0
 LINUX_ARCH=arm64
 CONFIGURATION_OPTIONS="--disable-multilib" # --disable-threads --disable-shared
-PARALLEL_MAKE=-j4
-BINUTILS_VERSION=binutils-2.24
+PARALLEL_MAKE="-j$(nproc --all)"
+BINUTILS_VERSION=${BINUTILS_VERSION:-binutils-2.24}
 GCC_VERSION=${GCC_VERSION:-gcc-4.9.2}
-LINUX_KERNEL_VERSION=linux-3.17.2
-GLIBC_VERSION=glibc-2.20
+LINUX_KERNEL_VERSION=${LINUX_KERNEL_VERSION:-linux-3.17.2}
+GLIBC_VERSION=${GLIBC_VERSION:-glibc-2.20}
 MPFR_VERSION=mpfr-3.1.2
 GMP_VERSION=gmp-6.0.0a
 MPC_VERSION=mpc-1.0.2
@@ -45,7 +45,7 @@ wget -nc https://ftp.gnu.org/gnu/gmp/$GMP_VERSION.tar.xz
 wget -nc https://ftp.gnu.org/gnu/mpc/$MPC_VERSION.tar.gz
 wget -nc https://gcc.gnu.org/pub/gcc/infrastructure/$ISL_VERSION.tar.bz2
 wget -nc https://gcc.gnu.org/pub/gcc/infrastructure/$CLOOG_VERSION.tar.gz
-# gcc.gnu.org/pub/gcc/infrastructure/isl-0.12.2.tar.bz2
+
 # Extract everything
 for f in *.tar*; do tar xfk $f; done
 
