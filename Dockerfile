@@ -24,7 +24,7 @@ COPY setup.sh .
 
 RUN yum install -y epel-release \
     && yum install -y gcc gcc-c++ lbzip2 make wget \
-    && bash -c "LINUX_KERNEL_VERSION='linux-3.16.84' \
+    && bash -c "LINUX_KERNEL_VERSION='linux-3.16.85' \
                 GCC_VERSION='gcc-4.8.5' \
                 GLIBC_VERSION='glibc-2.17' \
                 BINUTILS_VERSION='binutils-2.27' \
