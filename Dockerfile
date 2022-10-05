@@ -22,7 +22,8 @@ WORKDIR /build
 
 COPY setup.sh .
 
-RUN yum install -y epel-release \
+RUN yum update -y ca-certificates \
+    && yum install -y epel-release \
     && yum install -y gcc gcc-c++ lbzip2 make wget \
     && bash -c "LINUX_KERNEL_VERSION='linux-3.16.85' \
                 GCC_VERSION='gcc-4.8.5' \
@@ -30,6 +31,7 @@ RUN yum install -y epel-release \
                 BINUTILS_VERSION='binutils-2.27' \
                 ./setup.sh" \
     && rm -rf /build/* \
-    && yum erase -y epel-release gcc gcc-c++ lbzip2 make wget
+    && yum erase -y epel-release gcc gcc-c++ lbzip2 make wget \
+    && yum clean all
 
 ENV PATH="/opt/cross/bin:${PATH}"
