@@ -24,14 +24,18 @@ COPY setup.sh .
 
 RUN yum update -y ca-certificates \
     && yum install -y epel-release \
-    && yum install -y gcc gcc-c++ lbzip2 make wget \
-    && bash -c "LINUX_KERNEL_VERSION='linux-3.16.85' \
-    GCC_VERSION='gcc-4.8.5' \
-    GLIBC_VERSION='glibc-2.17' \
-    BINUTILS_VERSION='binutils-2.27' \
+    && yum install -y automake bison flex gcc gcc-c++ gmp-devel mpfr-devel libmpc-devel \
+    lbzip2 make ncurses-devel patch perl pkgconfig wget xz \
+    glibc-devel elfutils-libelf-devel file rsync bc git \
+    && yum install -y texinfo --enablerepo=powertools \
+    && bash -c "LINUX_KERNEL_VERSION='linux-4.18.0' \
+    GCC_VERSION='gcc-8.4.0' \
+    GLIBC_VERSION='glibc-2.28' \
+    BINUTILS_VERSION='binutils-2.30' \
     ./setup.sh" \
     && rm -rf /build/* \
-    && yum erase -y epel-release gcc gcc-c++ lbzip2 make wget \
+    && yum erase -y automake bison epel-release flex gcc gcc-c++ gmp-devel mpfr-devel libmpc-devel \
+    lbzip2 make ncurses-devel patch perl pkgconfig texinfo wget \
     && yum clean all
 
 ENV PATH="/opt/cross/bin:${PATH}"
