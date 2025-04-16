@@ -22,11 +22,11 @@ WORKDIR /build
 
 COPY setup.sh .
 
-RUN yum update -y ca-certificates \
-    && yum install -y epel-release \
-    && yum install -y automake bison flex gcc gcc-c++ gmp-devel mpfr-devel libmpc-devel \
-    lbzip2 make ncurses-devel patch perl pkgconfig wget xz \
-    glibc-devel elfutils-libelf-devel file rsync bc git \
+RUN dnf update -y ca-certificates \
+    && dnf install -y epel-release \
+    && dnf install -y automake bc bison diffutils elfutils-libelf-devel file flex gcc gcc-c++ git glibc-devel \
+    gmp-devel lbzip2 libmpc-devel make mpfr-devel ncurses-devel patch perl pkgconfig rsync \
+    wget xz \
     && yum install -y texinfo --enablerepo=powertools \
     && bash -c "LINUX_KERNEL_VERSION='linux-4.18.20' \
     GCC_VERSION='gcc-8.4.0' \
@@ -34,8 +34,8 @@ RUN yum update -y ca-certificates \
     BINUTILS_VERSION='binutils-2.30' \
     ./setup.sh" \
     && rm -rf /build/* \
-    && yum erase -y automake bison epel-release flex gcc gcc-c++ gmp-devel mpfr-devel libmpc-devel \
-    lbzip2 make ncurses-devel patch perl pkgconfig texinfo wget \
-    && yum clean all
+    && dnf erase -y automake bison diffutils epel-release flex gcc gcc-c++ gmp-devel lbzip2 libmpc-devel \
+    make mpfr-devel ncurses-devel patch perl pkgconfig texinfo wget \
+    && dnf clean all
 
 ENV PATH="/opt/cross/bin:${PATH}"
