@@ -28,7 +28,7 @@ RUN yum update -y ca-certificates \
     lbzip2 make ncurses-devel patch perl pkgconfig wget xz \
     glibc-devel elfutils-libelf-devel file rsync bc git \
     && yum install -y texinfo --enablerepo=powertools \
-    && bash -c "LINUX_KERNEL_VERSION='linux-4.18.0' \
+    && bash -c "LINUX_KERNEL_VERSION='linux-4.18.20' \
     GCC_VERSION='gcc-8.4.0' \
     GLIBC_VERSION='glibc-2.28' \
     BINUTILS_VERSION='binutils-2.30' \
