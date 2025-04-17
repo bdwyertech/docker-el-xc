@@ -11,7 +11,7 @@ on:
     branches: ['main']
 
 env:
-  IMAGE_NAME: bdwyertech/el-xc
+  IMAGE_NAME: bdwyertech/el8-xc
 
 jobs:
   build-and-push-image:
