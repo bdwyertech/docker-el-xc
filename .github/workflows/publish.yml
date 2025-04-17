@@ -75,7 +75,7 @@ jobs:
           push: true
           build-args: |
             BUILD_DATE=${{ steps.params.outputs.date }}
-            VCS_REF=${{ github.sha }}
+            VCS_REF=${{ github.sha | slice(0, 7) }}
           tags: |
             ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
@@ -89,7 +89,7 @@ jobs:
       - name: Run Trivy vulnerability scanner
         uses: aquasecurity/trivy-action@0.28.0
         with:
-          image-ref: ghcr.io/${{ env.IMAGE_NAME }}:${{ steps.params.outputs.date }}--${{ github.sha }}
+            image-ref: ghcr.io/${{ env.IMAGE_NAME }}:${{ steps.params.outputs.date }}--${{ github.sha | slice(0, 7) }}
           format: 'sarif'
           output: 'trivy-results.sarif'
           severity: 'CRITICAL,HIGH'
