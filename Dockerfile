@@ -1,4 +1,4 @@
-FROM rockylinux:8 as build
+FROM rockylinux:8 AS build
 
 WORKDIR /build
 

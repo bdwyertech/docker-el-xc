@@ -80,33 +80,18 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
           provenance: true
           sbom: true
-      
-      # Security scanning with Trivy
+
       - name: Run Trivy vulnerability scanner
-        uses: aquasecurity/trivy-action@master
+        uses: aquasecurity/trivy-action@0.28.0
         with:
           image-ref: ghcr.io/${{ env.IMAGE_NAME }}:${{ steps.params.outputs.date }}--${{ github.sha }}
           format: 'sarif'
           output: 'trivy-results.sarif'
           severity: 'CRITICAL,HIGH'
-      
-      # Upload scan results to GitHub Security tab
+  
       - name: Upload Trivy scan results to GitHub Security tab
-        uses: github/codeql-action/upload-sarif@v2
+        uses: github/codeql-action/upload-sarif@v3
         with:
           sarif_file: 'trivy-results.sarif'
           category: 'container-security'
-          
-      # Generate HTML report (optional)
-      - name: Generate HTML vulnerability report
-        run: |
-          trivy image --format template --template "@/usr/local/share/trivy/templates/html.tpl" \
-            -o scan-report.html \
-            ghcr.io/${{ env.IMAGE_NAME }}:${{ steps.params.outputs.date }}--${{ github.sha }}
-            
-      # Upload HTML report as an artifact
-      - name: Upload vulnerability report
-        uses: actions/upload-artifact@v4
-        with:
-          name: vulnerability-report
-          path: scan-report.html
+
