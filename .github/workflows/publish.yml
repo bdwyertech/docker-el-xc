@@ -75,11 +75,16 @@ jobs:
           push: true
           build-args: |
             BUILD_DATE=${{ steps.params.outputs.date }}
+            VCS_REF=${{ github.sha }}
           tags: |
             ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
           provenance: true
           sbom: true
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+          # cache-from: type=registry,ref=ghcr.io/${{ env.IMAGE_NAME }}:buildcache
+          # cache-to: type=registry,ref=ghcr.io/${{ env.IMAGE_NAME }}:buildcache,mode=max
 
       - name: Run Trivy vulnerability scanner
         uses: aquasecurity/trivy-action@0.28.0
