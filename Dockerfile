@@ -38,6 +38,8 @@ LABEL org.opencontainers.image.title="bdwyertech/el8-xc" \
     org.label-schema.vcs-ref=$VCS_REF \
     org.label-schema.build-date=$BUILD_DATE
 
+RUN dnf update -y && dnf install -y findutils --setopt=keepcache=0 && dnf clean all
+
 COPY --from=build /opt/cross /opt/cross
 
 ENV PATH="/opt/cross/bin:${PATH}"
