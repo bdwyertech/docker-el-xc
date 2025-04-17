@@ -38,9 +38,16 @@ LABEL org.opencontainers.image.title="bdwyertech/el8-xc" \
     org.label-schema.vcs-ref=$VCS_REF \
     org.label-schema.build-date=$BUILD_DATE
 
-RUN dnf update -y && dnf install -y findutils --setopt=keepcache=0 && dnf clean all
+RUN dnf update -y && dnf install -y findutils git --setopt=keepcache=0 && dnf clean all
 
 COPY --from=build /opt/cross /opt/cross
+
+RUN cd /opt/cross/bin && \
+    for file in aarch64-ol8u10-linux-gnu-*; do \
+    ln -s "$file" "aarch64-linux-$(echo $file | cut -d- -f5-)" ; \
+    done
+
+WORKDIR /build
 
 ENV PATH="/opt/cross/bin:${PATH}"
 
