@@ -19,6 +19,7 @@ jobs:
     permissions:
       contents: read
       packages: write
+      id-token: write  # Required for provenance metadata
 
     steps:
       - name: Checkout repository
@@ -66,6 +67,7 @@ jobs:
         uses: docker/setup-buildx-action@v3
 
       - name: Build and push Docker image
+        id: docker_build
         uses: docker/build-push-action@v6
         with:
           context: .
@@ -76,3 +78,35 @@ jobs:
           tags: |
             ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
+          provenance: true
+          sbom: true
+      
+      # Security scanning with Trivy
+      - name: Run Trivy vulnerability scanner
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: ghcr.io/${{ env.IMAGE_NAME }}:${{ steps.params.outputs.date }}--${{ github.sha }}
+          format: 'sarif'
+          output: 'trivy-results.sarif'
+          severity: 'CRITICAL,HIGH'
+      
+      # Upload scan results to GitHub Security tab
+      - name: Upload Trivy scan results to GitHub Security tab
+        uses: github/codeql-action/upload-sarif@v2
+        with:
+          sarif_file: 'trivy-results.sarif'
+          category: 'container-security'
+          
+      # Generate HTML report (optional)
+      - name: Generate HTML vulnerability report
+        run: |
+          trivy image --format template --template "@/usr/local/share/trivy/templates/html.tpl" \
+            -o scan-report.html \
+            ghcr.io/${{ env.IMAGE_NAME }}:${{ steps.params.outputs.date }}--${{ github.sha }}
+            
+      # Upload HTML report as an artifact
+      - name: Upload vulnerability report
+        uses: actions/upload-artifact@v3
+        with:
+          name: vulnerability-report
+          path: scan-report.html
