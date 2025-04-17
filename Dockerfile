@@ -42,11 +42,6 @@ RUN dnf update -y && dnf install -y findutils git --setopt=keepcache=0 && dnf cl
 
 COPY --from=build /opt/cross /opt/cross
 
-RUN cd /opt/cross/bin && \
-    for file in aarch64-ol8u10-linux-gnu-*; do \
-    ln -s "$file" "aarch64-linux-$(echo $file | cut -d- -f5-)" ; \
-    done
-
 WORKDIR /build
 
 ENV PATH="/opt/cross/bin:${PATH}"
